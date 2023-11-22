@@ -38,4 +38,8 @@ defineProps<{
   width: 75px;
   height: 75px;
 }
+
+svg:hover {
+  fill: yellowgreen;
+}
 </style>

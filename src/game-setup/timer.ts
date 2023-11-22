@@ -1,27 +1,17 @@
-import { ref, type Ref } from 'vue'
+import { ref } from 'vue'
 
-export let interValIndex: number | undefined = undefined
+export const interValIndex: number[] = []
 export const timerState = ref(0)
-export const gameStatus: Ref<'started' | 'stopped' | 'finished'> = ref('stopped')
-function useTimer(min: number, secs: number) {
-  clearInterval(interValIndex)
+
+export function useTimer(min: number, secs: number, cb?: () => void) {
   timerState.value = min * 60 + secs
-  interValIndex = setInterval(() => {
+  const i = setInterval(() => {
     if (timerState.value > 0) {
       timerState.value--
     } else {
-      gameStatus.value = 'finished'
-      clearInterval(interValIndex)
+      clearInterval(interValIndex.length && interValIndex[interValIndex.length - 1])
+      cb && cb()
     }
   }, 1000)
-}
-
-export function useStartTimer(args: { minutes: number; seconds: number }) {
-  clearInterval(interValIndex)
-  useTimer(args.minutes, args.seconds)
-}
-
-export function useStopTimer() {
-  clearInterval(interValIndex)
-  timerState.value = 0
+  interValIndex.push(i)
 }

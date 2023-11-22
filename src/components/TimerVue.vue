@@ -3,10 +3,11 @@ import { watch, ref } from 'vue'
 import { timerState } from '../game-setup/timer'
 const formattedTime = ref('00:00')
 const dangerState = ref<boolean>(false)
+const dangerValue = 15
 watch(timerState, (newVal) => {
-  if (newVal <= 30 && !dangerState.value) {
+  if (newVal <= dangerValue && !dangerState.value) {
     dangerState.value = true
-  } else if (newVal > 30 && dangerState.value) {
+  } else if (newVal > dangerValue && dangerState.value) {
     dangerState.value = false
   }
   const min = Math.floor(newVal / 60)

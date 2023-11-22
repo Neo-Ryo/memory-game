@@ -8,4 +8,10 @@ import HiveGame from '../components/HiveGame.vue'
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+</style>

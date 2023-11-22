@@ -6,25 +6,25 @@ type Grid = {
 }[]
 
 const grid: Grid = [
-  { val: 'A', int: 1, pos: 1, line: 1 },
-  { val: 'B', int: 2, pos: 2, line: 1 },
-  { val: 'C', int: 3, pos: 3, line: 1 },
-  { val: 'D', int: 4, pos: 1, line: 2 },
-  { val: 'E', int: 5, pos: 2, line: 2 },
-  { val: 'F', int: 6, pos: 3, line: 2 },
-  { val: 'G', int: 7, pos: 4, line: 2 },
-  { val: 'H', int: 8, pos: 1, line: 3 },
-  { val: 'I', int: 9, pos: 2, line: 3 },
-  { val: 'J', int: 10, pos: 3, line: 3 },
-  { val: 'K', int: 11, pos: 4, line: 3 },
-  { val: 'L', int: 12, pos: 5, line: 3 },
-  { val: 'M', int: 13, pos: 1, line: 4 },
-  { val: 'N', int: 14, pos: 2, line: 4 },
-  { val: 'O', int: 15, pos: 3, line: 4 },
-  { val: 'P', int: 16, pos: 4, line: 4 },
-  { val: 'Q', int: 17, pos: 1, line: 5 },
-  { val: 'R', int: 18, pos: 2, line: 5 },
-  { val: 'S', int: 19, pos: 3, line: 5 }
+  { val: 'A', int: 0, pos: 1, line: 1 },
+  { val: 'B', int: 0, pos: 2, line: 1 },
+  { val: 'C', int: 0, pos: 3, line: 1 },
+  { val: 'D', int: 0, pos: 1, line: 2 },
+  { val: 'E', int: 0, pos: 2, line: 2 },
+  { val: 'F', int: 0, pos: 3, line: 2 },
+  { val: 'G', int: 0, pos: 4, line: 2 },
+  { val: 'H', int: 0, pos: 1, line: 3 },
+  { val: 'I', int: 0, pos: 2, line: 3 },
+  { val: 'J', int: 0, pos: 3, line: 3 },
+  { val: 'K', int: 0, pos: 4, line: 3 },
+  { val: 'L', int: 0, pos: 5, line: 3 },
+  { val: 'M', int: 0, pos: 1, line: 4 },
+  { val: 'N', int: 0, pos: 2, line: 4 },
+  { val: 'O', int: 0, pos: 3, line: 4 },
+  { val: 'P', int: 0, pos: 4, line: 4 },
+  { val: 'Q', int: 0, pos: 1, line: 5 },
+  { val: 'R', int: 0, pos: 2, line: 5 },
+  { val: 'S', int: 0, pos: 3, line: 5 }
 ]
 
 const line_poss = ['ABC', 'DEF', 'EFG', 'HIJ', 'IJK', 'JKL', 'MNO', 'NOP', 'QRS']
@@ -50,56 +50,7 @@ const diag_poss = [
   'JNQ'
 ]
 
-export function checkCombi(arr: Grid): string | Grid {
-  if (arr.length !== 3) return 'Invalid suite'
-  const [l1, l2, l3] = arr.sort((a, b) => a.line - b.line)
-  if ((l1.line === l2.line && l2.line !== l3.line) || (l2.line === l3.line && l2.line !== l1.line))
-    return 'Invalid suite lines'
-  if (l1.line === l2.line) {
-    // same line
-    const [p1, p2, p3] = arr.sort((a, b) => a.pos - b.pos).map((e) => e.pos)
-    if (p1 === p2 || p2 === p3 || p2 - p1 !== 1 || p3 - p2 !== 1) {
-      return 'Invalid suite positions'
-    }
-    return arr
-  } else {
-    // diff lines;
-    if (l2.line - l1.line !== 1 || l3.line - l2.line !== 1) {
-      return 'Invalid suite lines'
-    } else {
-      const [p1, p2, p3] = [l1.pos, l2.pos, l3.pos]
-      switch ([l1.line, l2.line, l3.line].toString()) {
-        case [1, 2, 3].toString(): {
-          if ((p1 === p2 && p2 !== p3) || (p1 !== p2 && (p2 - p1 !== 1 || p3 - p2 !== 1))) {
-            return 'Invalid suite positions c1'
-          }
-          return arr
-        }
-        case [2, 3, 4].toString(): {
-          if (
-            (p1 === 1 && p2 === 1) ||
-            (p1 === 4 && p2 === 5) ||
-            (p1 === 4 && p2 === 1) ||
-            (p1 === p2 && p2 - p3 !== 1) ||
-            (p2 - p1 === 1 && p2 !== p3)
-          ) {
-            return 'Invalid suite positions c2'
-          }
-          return arr
-        }
-        case [3, 4, 5].toString(): {
-          if ((p1 === p2 && p2 !== p3) || (p1 !== p2 && (p1 - p2 !== 1 || p2 - p3 !== 1))) {
-            return 'Invalid suite positions c3'
-          }
-          return arr
-        }
-        default:
-          break
-      }
-      return arr
-    }
-  }
-}
+export const combis = line_poss.concat(diag_poss)
 
 export function setUpGame() {
   const num = Math.floor(Math.random() * 100)
@@ -109,7 +60,6 @@ export function setUpGame() {
   })
 
   const sGrid = grid
-  const combis = line_poss.concat(diag_poss)
   const potentialRes: number[] = []
   for (const combi of combis) {
     const [l1, l2, l3] = combi

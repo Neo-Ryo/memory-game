@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { phase, startGame, gameStatus, stopGame } from '../game-setup/game'
-import { grid } from '../game-setup/gridData'
+import {
+  phase,
+  startGame,
+  gameStatus,
+  stopGame,
+  numToGuess,
+  gameHive,
+  phaseDesc
+} from '../game-setup/game'
 import { hexClass } from '../game-setup/hexaClasses'
 import Hexa2 from '../components/icons/HexagonComp.vue'
 import Timer from '../components/TimerVue.vue'
 
-const gameHive = ref(grid)
-const phaseDesc = ref<string>('You have 1 minute to memorizing as much number as you can')
 const playerInput = ref('')
 function handleStartStop() {
   console.log(gameStatus)
@@ -32,16 +37,20 @@ function handleStartStop() {
   <div class="game-phase-description">
     {{ phaseDesc }}
   </div>
+  <div class="number-to-find">Combinasion should result: {{ numToGuess }}</div>
   <div class="hive-wrapper">
     <Hexa2
       :class="hexClass(index)"
       v-for="index in gameHive.length"
-      :key="index"
-      :value="gameHive[index - 1].val"
+      :key="index + phase"
+      :value="
+        phase === 'guessing phase' || phase === 'game over'
+          ? gameHive[index - 1].val
+          : gameHive[index - 1].int
+      "
     />
   </div>
   <div class="bottom-elements">
-    <div class="number-to-find">27</div>
     <button class="start-button" @click="handleStartStop">
       {{ gameStatus === 'started' ? 'STOP' : 'START' }}
     </button>
@@ -76,7 +85,13 @@ function handleStartStop() {
   font-size: xx-large;
   font-weight: 700;
 }
-
+.number-to-find {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  font-size: xx-large;
+  font-weight: 700;
+}
 .game-phase-description {
   display: flex;
   width: 100%;

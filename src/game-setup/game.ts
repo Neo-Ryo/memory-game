@@ -1,8 +1,7 @@
-import { ref, type Ref } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import { useTimer, timerState } from './timer'
-import { diag_poss, grid, line_poss } from './gridData'
-
-export const combis = line_poss.concat(diag_poss)
+import { grid, allValidCombis } from './gridData'
+import { playerInput } from './playerInput'
 
 export function setUpGameGrid() {
   const num = Math.floor(Math.random() * 100)
@@ -13,7 +12,7 @@ export function setUpGameGrid() {
 
   const sGrid = grid
   const potentialRes: number[] = []
-  for (const combi of combis) {
+  for (const combi of allValidCombis) {
     const [l1, l2, l3] = combi
     const [res1, res2, res3] = [
       sGrid.find((e) => e.val === l1)?.int,
@@ -43,24 +42,27 @@ export type GameStatus = 'started' | 'stopped' | 'finished'
 export const gameStatus: Ref<GameStatus> = ref('stopped')
 export const phase = ref<'discovery phase' | 'guessing phase' | 'game over'>('game over')
 export const phaseDesc = ref<string | null>(null)
-const discovery = 'You have 1 minute to memorizing as much number as you can'
-const guessing = 'You have 2 minutes 30 to attempt good combinations'
 export const gameHive = ref(grid)
 export const numToGuess = ref<number | null>(null)
+export const playerScore = ref<number>(0)
+// var
+const discovery = 'You have 1 minute to memorizing as much number as you can'
+const guessing = 'You have 2 minutes 30 to attempt good combinations'
 // funcs
 export function startGame() {
   // discovery time
   gameStatus.value = 'started'
   phase.value = 'discovery phase'
   phaseDesc.value = discovery
+  numToGuess.value = null
   const { result, newGrid } = setUpGameGrid()
   gameHive.value = newGrid
-  useTimer(1, 0, () => {
+  useTimer(0, 2, () => {
     // game time
     phase.value = 'guessing phase'
     phaseDesc.value = guessing
     numToGuess.value = result
-    useTimer(2, 30, () => {
+    useTimer(0, 30, () => {
       phase.value = 'game over'
       phaseDesc.value = null
       gameStatus.value = 'finished'
@@ -77,8 +79,17 @@ export function stopGame() {
   const interval_id = setInterval(function () {}, Number.MAX_SAFE_INTEGER)
   // Clear any timeout/interval up to that id
   for (let i = 1; i < interval_id; i++) {
-    console.log(i)
-
     clearInterval(i)
   }
+}
+
+export function phaseWatcher(selected: Ref<boolean>) {
+  watch(phase, (newPhase) => {
+    console.log(newPhase)
+
+    if (newPhase === 'game over' || newPhase === 'discovery phase') {
+      playerInput.value = []
+      selected.value = false
+    }
+  })
 }

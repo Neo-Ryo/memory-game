@@ -27,9 +27,9 @@ export const grid: Grid = [
   { val: 'S', int: 0, pos: 3, line: 5 }
 ]
 
-export const line_poss = ['ABC', 'DEF', 'EFG', 'HIJ', 'IJK', 'JKL', 'MNO', 'NOP', 'QRS']
+const line_poss = ['ABC', 'DEF', 'EFG', 'HIJ', 'IJK', 'JKL', 'MNO', 'NOP', 'QRS']
 
-export const diag_poss = [
+const diag_poss = [
   'ADH',
   'BEI',
   'CFJ',
@@ -49,3 +49,23 @@ export const diag_poss = [
   'KOR',
   'JNQ'
 ]
+
+export const allValidCombis = line_poss.concat(diag_poss)
+
+function checkArrAnyOrderAgainstValidCombi(
+  validCombi: string,
+  playerInput: Array<string>
+): boolean {
+  const v = validCombi.split('')
+  if (v.sort().join('') === playerInput.sort().join('')) {
+    return true
+  }
+  return false
+}
+
+export function checkIfValidInput(arr: Array<string>): boolean {
+  if (arr.length !== 3) return false
+  return allValidCombis.some((e) => {
+    return checkArrAnyOrderAgainstValidCombi(e, arr)
+  })
+}

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import {
   phase,
   startGame,
@@ -10,13 +9,12 @@ import {
   phaseDesc
 } from '../game-setup/game'
 import { hexClass } from '../game-setup/hexaClasses'
+import { playerInput, submitCombi } from '../game-setup/playerInput'
 import Hexa2 from '../components/icons/HexagonComp.vue'
 import Timer from '../components/TimerVue.vue'
+import PlayerBox from '../components/PlayerInputBox.vue'
 
-const playerInput = ref('')
 function handleStartStop() {
-  console.log(gameStatus)
-
   if (gameStatus.value === 'stopped' || gameStatus.value === 'finished') {
     startGame()
   } else {
@@ -28,7 +26,7 @@ function handleStartStop() {
 <template>
   <div class="top-elements">
     <Timer />
-    <div class="player-combi">ABC</div>
+
     <div class="scores">3pts</div>
   </div>
   <div class="game-phase">
@@ -37,7 +35,16 @@ function handleStartStop() {
   <div class="game-phase-description">
     {{ phaseDesc }}
   </div>
-  <div class="number-to-find">Combinasion should result: {{ numToGuess }}</div>
+  <div class="number-to-find">
+    Combinasion should result: <span class="red-text">{{ numToGuess }}</span>
+  </div>
+  <div class="player-combi">
+    <PlayerBox :letter="playerInput[0]" />
+    <PlayerBox :letter="playerInput[1]" />
+    <PlayerBox :letter="playerInput[2]" />
+    <!-- <div class="del-key" @click="deleteInput">X</div> -->
+    <div class="validate-key" @click="submitCombi">V</div>
+  </div>
   <div class="hive-wrapper">
     <Hexa2
       :class="hexClass(index)"
@@ -87,8 +94,10 @@ function handleStartStop() {
 }
 .number-to-find {
   display: flex;
+  flex-direction: column;
   width: 100%;
   justify-content: center;
+  align-items: center;
   font-size: xx-large;
   font-weight: 700;
 }
@@ -98,6 +107,53 @@ function handleStartStop() {
   justify-content: center;
 }
 
+.player-combi {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.del-key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  font-weight: 700;
+  height: 50px;
+  width: 35px;
+  border: 4px solid #b84141;
+  color: #b84141;
+  border-radius: 10px;
+  margin: 5px 5px 5px 25px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.del-key:hover {
+  background-color: #b84141;
+  color: inherit;
+}
+
+.validate-key {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  font-weight: 700;
+  height: 50px;
+  width: 35px;
+  border: 4px solid #3eb07d;
+  color: #3eb07d;
+  border-radius: 10px;
+  margin: 5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.validate-key:hover {
+  background-color: #3eb07d;
+  color: inherit;
+}
 .start-button {
   height: 50px;
   width: 100px;
@@ -113,5 +169,17 @@ function handleStartStop() {
   color: #b84141;
   border: 5px solid #41b883;
   transition: 0.25s ease-in-out;
+}
+
+.red-text {
+  color: #b84141;
+}
+
+.green-text {
+  color: #41b883;
+}
+
+span {
+  background-color: transparent;
 }
 </style>

@@ -1,120 +1,120 @@
 .hive-wrapper {
   display: grid;
-  grid-auto-flow: row;
+  /* grid-auto-flow: row; */
   align-items: center;
-  width: 400px;
+  width: 650px;
+  height: 450px;
   margin: auto 10px;
-  gap: 1px 11px;
-  grid-template-columns: repeat(40, 1fr);
-  grid-template-rows: repeat(10, 1fr);
+  /* gap: 1px 11px; */
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(16, 1fr);
 }
 .one {
-  grid-area: 1 / 12 / 4/ 14;
+  grid-area: 1 / 6 / 3/ 8;
   align-self: center;
   margin: auto;
 }
 .two {
-  grid-area: 1 / 18 / 4/ 20;
+  grid-area: 1 / 8 / 3/ 10;
   align-self: center;
   margin: auto;
 }
 .three {
-  grid-area: 1 / 24/ 4/ 26;
+  grid-area: 1 / 10/ 3/ 12;
   align-self: center;
   margin: auto;
 }
 .four {
-  grid-area: 3 / 9 / 5/ 11;
+  grid-area: 3 / 5 / 5/ 7;
   align-self: center;
   margin: auto;
 }
 .five {
-  grid-area: 3 / 15 / 5/ 17;
+  grid-area: 3 / 7 / 5/ 9;
   align-self: center;
   margin: auto;
 }
 .six {
   margin: auto;
-  grid-area: 3 / 21 / 5/ 23;
+  grid-area: 3 / 9 / 5/ 11;
   align-self: center;
 }
 .seven {
   margin: auto;
-  grid-area: 3 / 27 / 5/ 29;
+  grid-area: 3 / 11 / 5/ 13;
   align-self: center;
 }
 .eight {
   margin: auto;
-  grid-area: 4 / 6 / 7/ 8;
+  grid-area: 5 / 4 / 7/ 6;
   align-self: center;
 }
 .nine {
   margin: auto;
-  grid-area: 4 / 12 / 7/ 14;
+  grid-area: 5 / 6 / 7/ 8;
   align-self: center;
 }
 .ten {
   margin: auto;
-  grid-area: 4 / 18 / 7/ 20;
+  grid-area: 5 / 8 / 7/ 10;
   align-self: center;
 }
 
 .eleven {
   margin: auto;
-  grid-area: 4 / 24 / 7/ 26;
+  grid-area: 5 / 10 / 7/ 12;
   align-self: center;
 }
 .twelve {
-  grid-area: 4 / 30 / 7/ 32;
+  grid-area: 5 / 12 / 7/ 14;
   align-self: center;
   margin: auto;
 }
 .thirteen {
-  grid-area: 5 / 9 / 9 / 11;
+  grid-area: 7 / 5 / 9 / 7;
   align-self: center;
   margin: auto;
 }
 
 .fourteen {
-  grid-area: 5 / 15 / 9/ 17;
+  grid-area: 7 / 7 / 9 / 9;
   align-self: center;
   margin: auto;
 }
 
 .fifteen {
-  grid-area: 5 / 21 / 9 / 23;
+  grid-area: 7 / 9 / 9 / 11;
   align-self: center;
   margin: auto;
 }
 
 .sixteen {
-  grid-area: 5 / 27 / 9 / 29;
+  grid-area: 7 / 11 / 9 / 13;
   align-self: center;
   margin: auto;
 }
 
 .seventeen {
-  grid-area: 6 / 12 / 11 / 14;
+  grid-area: 9 / 6 / 11 / 8;
   align-self: center;
   margin: auto;
 }
 
 .eighteen {
-  grid-area: 6 / 18 / 11 / 20;
+  grid-area: 9 / 8 / 11 / 10;
   align-self: center;
   margin: auto;
 }
 
 .nineteen {
-  grid-area: 6 / 24 / 11 / 26;
+  grid-area: 9 / 10 / 11 / 12;
   align-self: center;
   margin: auto;
 }
 
-@media only screen and (min-width: 1224px) {
+/* @media only screen and (min-width: 1224px) {
   .hive-wrapper {
-    gap: 2px 17px;
-    width: 100%;
+    width: 650px;
   }
   .one {
     grid-area: 1 / 14 / 4/ 16;
@@ -219,4 +219,4 @@
     align-self: center;
     margin: auto;
   }
-}
+} */

@@ -21,10 +21,6 @@ export function handleEnterInupts(i: string, selected: Ref<boolean>) {
   }
 }
 
-// export function deleteInput() {
-//   if (playerInput.value.length > 0) playerInput.value.pop()
-// }
-
 export function submitCombi() {
   playerHasSubmit.value = !playerHasSubmit.value
   const res = checkIfValidInput(playerInput.value)

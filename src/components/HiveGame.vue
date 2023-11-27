@@ -128,7 +128,6 @@ function handleStartStop() {
 .previous-score {
   width: 100%;
   padding: 10px;
-  /* border: 1px solid #9e9e9e; */
 }
 .game-phase-description {
   display: flex;

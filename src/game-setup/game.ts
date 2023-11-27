@@ -4,10 +4,8 @@ import { grid, allValidCombis } from './gridData'
 import { playerInput } from './playerInput'
 
 export function setUpGameGrid() {
-  const num = Math.floor(Math.random() * 15)
   grid.forEach((e) => {
-    const add = Math.floor(Math.random() * 5)
-    e.int = num + add
+    e.int = Math.floor(Math.random() * 10)
   })
 
   const sGrid = grid

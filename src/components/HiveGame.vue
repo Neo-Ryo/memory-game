@@ -116,17 +116,19 @@ function handleStartStop() {
   justify-content: center;
   align-items: center;
   font-size: large;
+  border: 1px solid #9e9e9e;
+  border-radius: 5px;
   font-weight: 500;
 }
 .current-score {
   width: 100%;
   padding: 10px;
-  border: 1px solid #9e9e9e;
+  border-bottom: 1px solid #9e9e9e;
 }
 .previous-score {
   width: 100%;
   padding: 10px;
-  border: 1px solid #9e9e9e;
+  /* border: 1px solid #9e9e9e; */
 }
 .game-phase-description {
   display: flex;

@@ -56,7 +56,6 @@ const discovery = 'You have 1 minute to memorizing as much number as you can'
 const guessing = 'You have 2 minutes 30 to attempt good combinations'
 // funcs
 export function startGame() {
-  // discovery time
   gameStatus.value = 'started'
   phase.value = 'discovery phase'
   phaseDesc.value = discovery
@@ -67,12 +66,13 @@ export function startGame() {
   intel.value.goodAnswer = false
   const { result, newGrid } = setUpGameGrid()
   gameGrid.value = newGrid
-  useTimer(0, 30, () => {
+  // discovery time
+  useTimer(1, 0, () => {
     // game time
     phase.value = 'guessing phase'
     phaseDesc.value = guessing
     numToGuess.value = result
-    useTimer(1, 30, () => {
+    useTimer(2, 30, () => {
       phase.value = 'game over'
       phaseDesc.value = null
       gameStatus.value = 'finished'

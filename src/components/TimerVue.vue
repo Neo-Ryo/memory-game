@@ -22,6 +22,7 @@ watch(timerState, (newVal) => {
 
 <style scoped>
 .timer {
+  height: fit-content;
   font-size: x-large;
   font-weight: 700;
   color: #41b883;

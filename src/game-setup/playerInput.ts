@@ -1,10 +1,11 @@
 import { ref, type Ref } from 'vue'
 import { checkIfValidInput } from './gridData'
-import { playerScore } from './game'
+import { playerCurrentScore, checkResult, intel } from './game'
 
 // refs
 export const playerInput = ref<string[]>([])
 export const playerInputState = ref<null | boolean>(null)
+export const playerHasSubmit = ref<boolean>(false)
 
 export function handleEnterInupts(i: string, selected: Ref<boolean>) {
   if (selected.value) {
@@ -25,10 +26,15 @@ export function handleEnterInupts(i: string, selected: Ref<boolean>) {
 // }
 
 export function submitCombi() {
+  playerHasSubmit.value = !playerHasSubmit.value
   const res = checkIfValidInput(playerInput.value)
   if (res) {
-    console.log('VALID!')
+    if (checkResult(playerInput.value)) playerCurrentScore.value++
+    else playerCurrentScore.value--
   } else {
-    console.log('INVALID!')
+    playerCurrentScore.value--
+    intel.value.text = 'Invalid combination'
+    intel.value.goodAnswer = false
   }
+  playerInput.value = []
 }

@@ -4,9 +4,9 @@ import { grid, allValidCombis } from './gridData'
 import { playerInput } from './playerInput'
 
 export function setUpGameGrid() {
-  const num = Math.floor(Math.random() * 100)
+  const num = Math.floor(Math.random() * 15)
   grid.forEach((e) => {
-    const add = Math.floor(Math.random() * 6)
+    const add = Math.floor(Math.random() * 5)
     e.int = num + add
   })
 
@@ -34,7 +34,9 @@ export function setUpGameGrid() {
       res = potentialRes[v]
     }
   }
-  return { newGrid: sGrid, result: res }
+  // here making sure we 've got at least 7 good combinations
+  if (max >= 7) return { newGrid: sGrid, result: res }
+  else return setUpGameGrid()
 }
 // types
 export type GameStatus = 'started' | 'stopped' | 'finished'
@@ -42,9 +44,15 @@ export type GameStatus = 'started' | 'stopped' | 'finished'
 export const gameStatus: Ref<GameStatus> = ref('stopped')
 export const phase = ref<'discovery phase' | 'guessing phase' | 'game over'>('game over')
 export const phaseDesc = ref<string | null>(null)
-export const gameHive = ref(grid)
+export const gameGrid = ref(grid)
 export const numToGuess = ref<number | null>(null)
-export const playerScore = ref<number>(0)
+export const playerCurrentScore = ref<number>(0)
+export const playerPreviousScore = ref<number>(0)
+export const playerGivenAnswers = ref<Array<string>>([])
+export const intel = ref<{ text: string; goodAnswer: boolean }>({
+  text: '',
+  goodAnswer: false
+})
 // var
 const discovery = 'You have 1 minute to memorizing as much number as you can'
 const guessing = 'You have 2 minutes 30 to attempt good combinations'
@@ -55,17 +63,23 @@ export function startGame() {
   phase.value = 'discovery phase'
   phaseDesc.value = discovery
   numToGuess.value = null
+  playerPreviousScore.value = playerCurrentScore.value
+  playerCurrentScore.value = 0
+  intel.value.text = ''
+  intel.value.goodAnswer = false
   const { result, newGrid } = setUpGameGrid()
-  gameHive.value = newGrid
-  useTimer(0, 2, () => {
+  gameGrid.value = newGrid
+  useTimer(0, 30, () => {
     // game time
     phase.value = 'guessing phase'
     phaseDesc.value = guessing
     numToGuess.value = result
-    useTimer(0, 30, () => {
+    useTimer(1, 30, () => {
       phase.value = 'game over'
       phaseDesc.value = null
       gameStatus.value = 'finished'
+      intel.value.text = ''
+      intel.value.goodAnswer = false
     })
   })
 }
@@ -76,6 +90,8 @@ export function stopGame() {
   timerState.value = 0
   numToGuess.value = null
   phaseDesc.value = null
+  intel.value.text = ''
+  intel.value.goodAnswer = false
   const interval_id = setInterval(function () {}, Number.MAX_SAFE_INTEGER)
   // Clear any timeout/interval up to that id
   for (let i = 1; i < interval_id; i++) {
@@ -83,13 +99,32 @@ export function stopGame() {
   }
 }
 
-export function phaseWatcher(selected: Ref<boolean>) {
-  watch(phase, (newPhase) => {
-    console.log(newPhase)
+export const phaseWatcher = watch(phase, (newPhase) => {
+  if (newPhase === 'game over' || newPhase === 'discovery phase') {
+    playerInput.value = []
+  }
+})
 
-    if (newPhase === 'game over' || newPhase === 'discovery phase') {
-      playerInput.value = []
-      selected.value = false
+export function checkResult(playerInput: Array<string>): boolean {
+  let playerRes = 0
+  for (const l of playerInput) {
+    const slot = gameGrid.value.find((e) => e.val === l)
+    if (slot) playerRes += slot.int
+  }
+  let isValid = false
+  if (playerGivenAnswers.value.find((e) => e === playerInput.sort().join(''))) {
+    intel.value.text = `Combination already given`
+    intel.value.goodAnswer = false
+  } else {
+    playerGivenAnswers.value.push(playerInput.sort().join(''))
+    isValid = playerRes === numToGuess.value
+    if (!isValid) {
+      intel.value.text = `${playerRes} is not right`
+      intel.value.goodAnswer = false
+    } else {
+      intel.value.text = `Well done!`
+      intel.value.goodAnswer = true
     }
-  })
+  }
+  return isValid
 }

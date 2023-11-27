@@ -5,11 +5,14 @@ import {
   gameStatus,
   stopGame,
   numToGuess,
-  gameHive,
-  phaseDesc
+  gameGrid,
+  phaseDesc,
+  playerCurrentScore,
+  playerPreviousScore,
+  intel
 } from '../game-setup/game'
 import { hexClass } from '../game-setup/hexaClasses'
-import { playerInput, submitCombi } from '../game-setup/playerInput'
+import { playerInput, submitCombi, playerHasSubmit } from '../game-setup/playerInput'
 import Hexa2 from '../components/icons/HexagonComp.vue'
 import Timer from '../components/TimerVue.vue'
 import PlayerBox from '../components/PlayerInputBox.vue'
@@ -24,19 +27,21 @@ function handleStartStop() {
 </script>
 
 <template>
-  <div class="top-elements">
-    <Timer />
-
-    <div class="scores">3pts</div>
-  </div>
   <div class="game-phase">
     {{ phase.toLocaleUpperCase() }}
+  </div>
+  <div class="top-elements">
+    <Timer />
+    <div class="scores">
+      <div class="current-score">Current score: {{ playerCurrentScore }} pts</div>
+      <div class="previous-score">Previous score: {{ playerPreviousScore }} pts</div>
+    </div>
   </div>
   <div class="game-phase-description">
     {{ phaseDesc }}
   </div>
   <div class="number-to-find">
-    Combinasion should result: <span class="red-text">{{ numToGuess }}</span>
+    Combinasion should result: <span class="red">{{ numToGuess }}</span>
   </div>
   <div class="player-combi">
     <PlayerBox :letter="playerInput[0]" />
@@ -45,15 +50,18 @@ function handleStartStop() {
     <!-- <div class="del-key" @click="deleteInput">X</div> -->
     <div class="validate-key" @click="submitCombi">V</div>
   </div>
+  <div class="intel" :class="{ red: !intel.goodAnswer, green: intel.goodAnswer }">
+    {{ intel.text }}
+  </div>
   <div class="hive-wrapper">
     <Hexa2
       :class="hexClass(index)"
-      v-for="index in gameHive.length"
-      :key="index + phase"
+      v-for="index in gameGrid.length"
+      :key="index + phase + playerHasSubmit"
       :value="
         phase === 'guessing phase' || phase === 'game over'
-          ? gameHive[index - 1].val
-          : gameHive[index - 1].int
+          ? gameGrid[index - 1].val
+          : gameGrid[index - 1].int
       "
     />
   </div>
@@ -67,9 +75,9 @@ function handleStartStop() {
 <style scoped>
 .top-elements {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   width: 100%;
-  height: 30px;
+  height: fit-content;
   padding: 10px;
   margin: auto;
 }
@@ -101,6 +109,25 @@ function handleStartStop() {
   font-size: xx-large;
   font-weight: 700;
 }
+
+.scores {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+  font-weight: 500;
+}
+.current-score {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #9e9e9e;
+}
+.previous-score {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #9e9e9e;
+}
 .game-phase-description {
   display: flex;
   width: 100%;
@@ -111,27 +138,6 @@ function handleStartStop() {
   display: flex;
   width: 100%;
   justify-content: center;
-}
-
-.del-key {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: larger;
-  font-weight: 700;
-  height: 50px;
-  width: 35px;
-  border: 4px solid #b84141;
-  color: #b84141;
-  border-radius: 10px;
-  margin: 5px 5px 5px 25px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.del-key:hover {
-  background-color: #b84141;
-  color: inherit;
 }
 
 .validate-key {
@@ -154,6 +160,14 @@ function handleStartStop() {
   background-color: #3eb07d;
   color: inherit;
 }
+
+.intel {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin: 10px;
+  font-weight: 500;
+}
 .start-button {
   height: 50px;
   width: 100px;
@@ -171,11 +185,11 @@ function handleStartStop() {
   transition: 0.25s ease-in-out;
 }
 
-.red-text {
+.red {
   color: #b84141;
 }
 
-.green-text {
+.green {
   color: #41b883;
 }
 

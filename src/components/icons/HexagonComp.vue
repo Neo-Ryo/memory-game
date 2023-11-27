@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { phase } from '../../game-setup/game'
+import { phase, phaseWatcher } from '../../game-setup/game'
 import { handleEnterInupts } from '../../game-setup/playerInput'
 const props = defineProps<{
   value: string | number
@@ -13,10 +13,12 @@ function setInput() {
     handleEnterInupts(props.value, selected)
   }
 }
+// TODO: find different way to use that weirdness
+phaseWatcher
 </script>
 
 <template>
-  <div class="hexa-wrapper" @click="setInput()">
+  <div class="hexa-wrapper" @click="setInput()" :key="phase">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="75"

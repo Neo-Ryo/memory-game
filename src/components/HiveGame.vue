@@ -41,7 +41,7 @@ function handleStartStop() {
     {{ phaseDesc }}
   </div>
   <div class="number-to-find">
-    Combinasion should result: <span class="red">{{ numToGuess }}</span>
+    Combinasion should result: <span class="num-to-guess red">{{ numToGuess ?? '-' }}</span>
   </div>
   <div class="player-combi">
     <PlayerBox :letter="playerInput[0]" />
@@ -135,6 +135,16 @@ function handleStartStop() {
   justify-content: center;
 }
 
+.num-to-guess {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  height: 50px;
+  border: 4px solid #b84141;
+  border-radius: 10px;
+  padding: 5px;
+}
 .player-combi {
   display: flex;
   width: 100%;

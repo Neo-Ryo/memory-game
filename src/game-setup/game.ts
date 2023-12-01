@@ -64,6 +64,7 @@ export function startGame() {
   playerCurrentScore.value = 0
   intel.value.text = ''
   intel.value.goodAnswer = false
+  playerGivenAnswers.value = []
   const { result, newGrid } = setUpGameGrid()
   gameGrid.value = newGrid
   // discovery time
